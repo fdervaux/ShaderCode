@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Example_Dissolve
+  m_Shader: {fileID: 4800000, guid: dffb32544c1e6fb469422aaf9f1e90b0, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _DissolveThreshold: 0.422
+    - _EdgeWidth: 0.147
+    - _NoiseScale: 10
+    - _NoiseSpeed: 0.05
+    m_Colors:
+    - _BaseColor: {r: 0.8382749, g: 0.52759343, b: 0.52759343, a: 1}
+    - _EdgeColor: {r: 27.857618, g: 3.9607623, b: 0, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
