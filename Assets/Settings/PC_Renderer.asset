@@ -68,11 +68,11 @@ MonoBehaviour:
   _material: {fileID: 2100000, guid: ff7bba89b0278f44b984dce177bbd33c, type: 2}
   _renderPassEvent: 550
   _requirements: -1
-  _outlineColor: {r: 0.2884097, g: 0.15284802, b: 0.09445222, a: 1}
-  _secondOutlineColor: {r: 0.066749685, g: 0.15574926, b: 0.33692718, a: 1}
+  _outlineColor: {r: 0.2884097, g: 0.15284802, b: 0.09445222, a: 0.9019608}
+  _secondOutlineColor: {r: 0.066749685, g: 0.15574926, b: 0.33692718, a: 0.9019608}
   _outlineDepthThreshold: 0.001
-  _outlineNormalThreshold: 0.097
-  _outlineKernelSize: 7
-  _outlineWidth: 2
-  _outlineEllipseWidth: 0.589
-  _outlineEllipseAngle: 5.06
+  _outlineNormalThreshold: 0.015
+  _outlineKernelSize: 5
+  _outlineWidth: 1
+  _outlineEllipseWidth: 0.565
+  _outlineEllipseAngle: 4.2

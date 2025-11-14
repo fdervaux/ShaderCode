@@ -221,10 +221,13 @@ Shader "Outline"
 
                 // poids de base (centre plus 4 taps)
                 float centerMask = SAMPLE_TEXTURE2D_X_LOD(_OutlineMaskTex, sampler_LinearRepeat, uv, _BlitMipLevel).r;
+
+
+               
                 float accum = centerMask * 4.0;
                 float wsum = 4.0;
 
-                for (int i = 0; i < 4; ++i)
+                /*for (int i = 0; i < 4; ++i)
                 {
                     float2 offUV = uv + offs[i] * texel;
                     float sampleMask = SAMPLE_TEXTURE2D_X_LOD(_OutlineMaskTex, sampler_LinearRepeat, offUV,
@@ -234,7 +237,7 @@ Shader "Outline"
                     float w = 1.0 * depthWeight;
                     accum += sampleMask * w;
                     wsum += w;
-                }
+                }*/
 
                 float blurred = (wsum > 0.0) ? (accum / wsum) : 0.0;
 
