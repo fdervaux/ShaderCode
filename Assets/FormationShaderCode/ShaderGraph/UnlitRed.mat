@@ -118,6 +118,7 @@ Material:
     - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
+    - _dither: 0.48
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
@@ -125,6 +126,7 @@ Material:
     - _MainColor: {r: 1, g: 0.47433776, b: 0.32549024, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _offset: {r: 1, g: 0, b: 0, a: 0}
+    - _speed: {r: 1, g: 1, b: 0, a: 0}
     - _tilling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
