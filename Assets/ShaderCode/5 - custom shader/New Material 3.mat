@@ -125,9 +125,12 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
+    - _StencilID: 1
+    - _StencilID2: 0
     - _Surface: 0
     - _WorkflowMode: 0
     - _ZWrite: 1
+    - _test: 0
     m_Colors:
     - _BaseColor: {r: 0.54177886, g: 0.54177886, b: 0.54177886, a: 1}
     - _Color: {r: 0.5417788, g: 0.5417788, b: 0.5417788, a: 1}
