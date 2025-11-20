@@ -72,6 +72,8 @@ Shader "Example/CustomShaderURP"
         [HideInInspector][NoScaleOffset]unity_Lightmaps("unity_Lightmaps", 2DArray) = "" {}
         [HideInInspector][NoScaleOffset]unity_LightmapsInd("unity_LightmapsInd", 2DArray) = "" {}
         [HideInInspector][NoScaleOffset]unity_ShadowMasks("unity_ShadowMasks", 2DArray) = "" {}
+        
+        [IntRange] _StencilID ("Stencil ID", Range(0, 255)) = 0
     }
 
     SubShader
@@ -106,6 +108,7 @@ Shader "Example/CustomShaderURP"
             ZWrite[_ZWrite]
             Cull[_Cull]
             AlphaToMask[_AlphaToMask]
+            
 
             HLSLPROGRAM
             #pragma target 2.0
@@ -519,5 +522,4 @@ Shader "Example/CustomShaderURP"
     }
 
     FallBack "Hidden/Universal Render Pipeline/FallbackError"
-    CustomEditor "UnityEditor.Rendering.Universal.ShaderGUI.LitShader"
 }

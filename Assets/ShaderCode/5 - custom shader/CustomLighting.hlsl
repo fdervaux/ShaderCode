@@ -45,14 +45,30 @@ half3 LightingSpecular(half3 lightColor, half3 lightDir, half3 normal, half3 vie
     return lightColor * specularReflection;
 }
 
+#include "SimplexNoise3D.hlsl"
+
 half3 LightingPhysicallyBased(BRDFData brdfData, BRDFData brdfDataClearCoat,
     half3 lightColor, half3 lightDirectionWS, float lightAttenuation,
-    half3 normalWS, half3 viewDirectionWS,
+    half3 normalWS, half3 viewDirectionWS, half3 positionWS,
     half clearCoatMask, bool specularHighlightsOff)
 {
     half NdotL = saturate(dot(normalWS, lightDirectionWS));
     
-    half3 radiance = lightColor * (smoothstep(0,0.05,lightAttenuation * NdotL) * 0.3  + smoothstep(0.4,0.42,lightAttenuation * NdotL) * 0.3 + 0.3);
+    half light =  lightAttenuation * NdotL;
+    
+    half step1 = smoothstep(0,0.2, light);
+    half step2 = smoothstep(0.5,0.7, light);
+    
+    half toonLight = step1 * 0.3 + step2 * 0.3 + 0.4;
+    
+    //float noise3D;
+    //SimplexNoise3D_float(positionWS * 100, noise3D);
+    //noise3D = Remap(-1,1,0,1, noise3D);
+    
+    //half stepvalue = step(noise3D, light);
+    
+    
+    half3 radiance = lightColor * toonLight;
     
     half3 brdf = brdfData.diffuse;
 #ifndef _SPECULARHIGHLIGHTS_OFF
@@ -81,13 +97,13 @@ half3 LightingPhysicallyBased(BRDFData brdfData, BRDFData brdfDataClearCoat,
     return brdf * radiance;
 }
 
-half3 LightingPhysicallyBased(BRDFData brdfData, BRDFData brdfDataClearCoat, Light light, half3 normalWS, half3 viewDirectionWS, half clearCoatMask, bool specularHighlightsOff)
+half3 LightingPhysicallyBased(BRDFData brdfData, BRDFData brdfDataClearCoat, Light light, half3 normalWS, half3 viewDirectionWS, half3 positionWS, half clearCoatMask, bool specularHighlightsOff)
 {
-    return LightingPhysicallyBased(brdfData, brdfDataClearCoat, light.color, light.direction, light.distanceAttenuation * light.shadowAttenuation, normalWS, viewDirectionWS, clearCoatMask, specularHighlightsOff);
+    return LightingPhysicallyBased(brdfData, brdfDataClearCoat, light.color, light.direction, light.distanceAttenuation * light.shadowAttenuation, normalWS, viewDirectionWS, positionWS, clearCoatMask, specularHighlightsOff);
 }
 
 // Backwards compatibility
-half3 LightingPhysicallyBased(BRDFData brdfData, Light light, half3 normalWS, half3 viewDirectionWS)
+half3 LightingPhysicallyBased(BRDFData brdfData, Light light, half3 normalWS, half3 viewDirectionWS, half3 positionWS)
 {
     #ifdef _SPECULARHIGHLIGHTS_OFF
     bool specularHighlightsOff = true;
@@ -95,23 +111,23 @@ half3 LightingPhysicallyBased(BRDFData brdfData, Light light, half3 normalWS, ha
     bool specularHighlightsOff = false;
 #endif
     const BRDFData noClearCoat = (BRDFData)0;
-    return LightingPhysicallyBased(brdfData, noClearCoat, light, normalWS, viewDirectionWS, 0.0, specularHighlightsOff);
+    return LightingPhysicallyBased(brdfData, noClearCoat, light, normalWS, viewDirectionWS, positionWS, 0.0, specularHighlightsOff);
 }
 
-half3 LightingPhysicallyBased(BRDFData brdfData, half3 lightColor, half3 lightDirectionWS, float lightAttenuation, half3 normalWS, half3 viewDirectionWS)
+half3 LightingPhysicallyBased(BRDFData brdfData, half3 lightColor, half3 lightDirectionWS, float lightAttenuation, half3 normalWS, half3 viewDirectionWS, half3 positionWS)
 {
     Light light;
     light.color = lightColor;
     light.direction = lightDirectionWS;
     light.distanceAttenuation = lightAttenuation;
     light.shadowAttenuation   = 1;
-    return LightingPhysicallyBased(brdfData, light, normalWS, viewDirectionWS);
+    return LightingPhysicallyBased(brdfData, light, normalWS, viewDirectionWS, positionWS);
 }
 
-half3 LightingPhysicallyBased(BRDFData brdfData, Light light, half3 normalWS, half3 viewDirectionWS, bool specularHighlightsOff)
+half3 LightingPhysicallyBased(BRDFData brdfData, Light light, half3 normalWS, half3 viewDirectionWS,half3 positionWS, bool specularHighlightsOff)
 {
     const BRDFData noClearCoat = (BRDFData)0;
-    return LightingPhysicallyBased(brdfData, noClearCoat, light, normalWS, viewDirectionWS, 0.0, specularHighlightsOff);
+    return LightingPhysicallyBased(brdfData, noClearCoat, light, normalWS, viewDirectionWS,positionWS, 0.0, specularHighlightsOff);
 }
 
 half3 LightingPhysicallyBased(BRDFData brdfData, half3 lightColor, half3 lightDirectionWS, float lightAttenuation, half3 normalWS, half3 viewDirectionWS, bool specularHighlightsOff)
@@ -307,7 +323,7 @@ half4 UniversalFragmentPBR(InputData inputData, SurfaceData surfaceData)
     {
         lightingData.mainLightColor = LightingPhysicallyBased(brdfData, brdfDataClearCoat,
                                                               mainLight,
-                                                              inputData.normalWS, inputData.viewDirectionWS,
+                                                              inputData.normalWS, inputData.viewDirectionWS, inputData.positionWS,
                                                               surfaceData.clearCoatMask, specularHighlightsOff);
 
         //step mainlightColor
@@ -344,7 +360,7 @@ half4 UniversalFragmentPBR(InputData inputData, SurfaceData surfaceData)
 #endif
         {
             lightingData.additionalLightsColor += LightingPhysicallyBased(brdfData, brdfDataClearCoat, light,
-                                                                          inputData.normalWS, inputData.viewDirectionWS,
+                                                                          inputData.normalWS, inputData.viewDirectionWS, inputData.positionWS,
                                                                           surfaceData.clearCoatMask, specularHighlightsOff);
         }
     LIGHT_LOOP_END
